@@ -1,0 +1,58 @@
+#canvas {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+  }
+
+  /* Header. Logos, button and title. */
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+  .logo-img {
+    height: 40vh;
+    width: 25vw;
+    background-color: blue;
+  }
+  
+  #start-button {
+    background-color: red;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    border-color: white;
+    box-shadow: 2rem;
+    transition: 1s;
+  }
+  
+  #start-button:hover {
+    transform: scale(1.5);
+  }
+
+.hidden {
+  display: none !important;
+}
+
+.game-board {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.gif {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+}
+
+.gif h1 {
+  color: white;
+  text-transform: uppercase;
+  font-family:Georgia, 'Times New Roman', Times, serif
+}
