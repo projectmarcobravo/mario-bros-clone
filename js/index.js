@@ -3,6 +3,7 @@ const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 const header = document.querySelector('.header')
 const gif = document.querySelector('.gif')
+const gameBoard = document.querySelector('.game-board')
 
 // Images
 const floorImg = new Image()
@@ -44,6 +45,27 @@ tube.src = "./images/tube.png"
 const piranha = new Image()
 piranha.src = "./images/piranha.png"
 
+const bowser = new Image()
+bowser.src = "./images/bowser.png"
+
+const fireball = new Image()
+fireball.src = "./images/fireball.png"
+
+const fireball2 = new Image()
+fireball2.src = "./images/fireball-left.png"
+
+const goombaImg = new Image()
+goombaImg.src = "./images/goomba.png"
+
+const marioFace = new Image()
+marioFace.src = "./images/mario-face.png"
+
+const flower = new Image()
+flower.src = "./images/flower.png"
+
+const fireballBowser = new Image()
+fireballBowser.src = "./images/fireball.bowser.png"
+
 let imgCharacter = marioImg
 
 
@@ -58,6 +80,7 @@ let playing = true
 // Start the game
 function startGame() {
     header.classList.add('hidden')
+    gameBoard.classList.remove('hidden')
     update()
 }
 
@@ -103,14 +126,51 @@ class Background {
 let background = new Background()
 
 
+//  Life Class
+
+class Life {
+  constructor(x, y) {
+    this.x = x
+    this.y = y
+    this.w = 50,
+    this.h = 50
+  }
+    drawLife() {
+      ctx.drawImage(marioFace, this.x, this.y, this.w, this.h)
+    }
+
+    drawScore() {
+      ctx.fillStyle = "yellow"
+      ctx.font = "20px Arial"
+      ctx.fillText(`Score: ${lifes}`, 50, 50, this.w, this.h)
+    }
+    drawScore1() {
+      if (lifes === 3) {
+        ctx.drawImage(marioFace, 20, 25, this.w, this.h)
+        ctx.drawImage(marioFace, 60, 25, this.w, this.h)
+        ctx.drawImage(marioFace, 100, 25, this.w, this.h)
+      }
+      if (lifes === 2) {
+        ctx.drawImage(marioFace, 20, 25, this.w, this.h)
+        ctx.drawImage(marioFace, 60, 25, this.w, this.h)
+      }
+      if (lifes === 1) {
+        ctx.drawImage(marioFace, 20, 25, this.w, this.h)
+      }
+    }
+}
+
+let lifes = 3;
+let mario1 = new Life()
+
+
 // Floor Class
 class Floor {
     constructor() {
         this.x = 0,
         this.y = 450,
         this.h = 1000,
-        this.w = 70,
-        this.color = "brown"
+        this.w = 70
     }
     drawFloor() {
         ctx.drawImage(floorImg, this.x, this.y, this.h, this.w)
@@ -124,16 +184,28 @@ class Player {
   constructor () {
     this.x = 50,
     this.y = 330,
-    this.h = 20,
+    this.h = 50,
     this.w = 40,
     this.speed = 40,
+    this.direction = "right"
     this.up = 0,
     this.left = 0,
-    this.right = 0
+    this.right = 0,
+    this.blockRight = false,
+    this.blockBot = false
   }
+
   drawPlayer(character) {
     ctx.drawImage(character, this.x, this.y, this.h, this.w)
-    this.moveDown()
+    
+    if (!this.blockBot) {
+      this.moveDown()
+    } 
+
+    if (!this.blockRight) {
+      this.x += this.right
+    } 
+    
     this.y -= this.up
     if  (this.up > 0){
       this.up--
@@ -143,7 +215,7 @@ class Player {
       if (this.left > 0) {
         this.left--
       }
-    this.x += this.right
+    
     if (this.right > 0) {
       this.right--
     }
@@ -155,15 +227,18 @@ class Player {
     }
     this.left = 7
     imgCharacter = marioLeft
+    this.direction = "left"
   }
 
   moveRight() {
-    if (this.x > canvas.width - this.w) {
+    if ((this.x > canvas.width - this.w)) {
       return
     }
     this.right = 7
     imgCharacter = marioImg
+    this.direction = "right"
   }
+
   moveUp() {
     if (this.y < 0) {
       return
@@ -171,6 +246,7 @@ class Player {
     this.up = 15
     imgCharacter = marioJump
   }
+
   moveDown () {
     if (this.y > canvas.height - 95) {
       return
@@ -181,15 +257,31 @@ class Player {
     }
   }
 
+  attack() {
+    let attack = new Attack(fireball, this.x, this.y, this.direction)
+    attackArray.push(attack)
+  }
+
   contains(b){
     return (this.x < b.x + b.w) &&
       (this.x + this.w > b.x) &&
       (this.y < b.y + b.h) &&
       (this.y + this.h > b.y)
   }
+
+  containsRight(b){
+    return (this.x < b.x + b.w) &&
+      (this.x + this.w > b.x)
+  }
+
+  containsBottom(b){
+    return (this.y < b.y + b.h) &&
+    (this.y + this.h > b.y)
+  }
 } 
 
 let player1 = new Player()
+let attackArray = [] 
 
 // Platforms Class
 
@@ -199,39 +291,116 @@ class Platforms {
     this.x = x,
     this.y = y,
     this.w = w,
-    this.h = h
+    this.h = h,
+    this.color = "#5F1B1B"
   }
   drawPlatform() {
-    ctx.drawImage(this.img, this.x, this.y, this.w, this.h);
+    ctx.fillStyle = this.color
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+  }
+
+  openDoor() {
+    if (player1.x === 700) {
+    obstacleVertical3 = obstacleVertical3 = new Platforms (this.color, 890, 230, 25, 180) 
+  }
   }
 }
 
-let tube1 = new Platforms(tube, 135, 375, 40, 75)
-let piranha1 = new Platforms(piranha, 135, 360, 40, 50)
-let obstacle1 = new Platforms (oneBlock, 195, 380, 25, 25)
-let obstacle2 = new Platforms (oneBlock, 245, 355, 25, 25)
-let obstacle3 = new Platforms (oneBlock, 295, 320, 25, 25)
-let obstacle4 = new Platforms (oneBlock, 345, 290, 25, 25)
-let obstacleVertical1 = new Platforms (blockVertical, 400, 270, 25, 180)
-let obstacleVertical2 = new Platforms (blockVertical, 650, 230, 25, 175)
-let obstacleVertical3 = new Platforms (blockVertical, 890, 230, 25, 175)
-let obstacleHorizontal1 = new Platforms(blockHorizontal, 400, 270, 180, 25)
-let obstacleHorizontal2 = new Platforms(blockHorizontal, 650, 230, 240, 25)
+// let tube1 = new Platforms(tube, 135, 375, 40, 75)
+// let piranha1 = new Platforms(piranha, 135, 360, 40, 50)
+// let bowser1 = new Platforms (bowser, 795, 360, 100, 100)
+let obstacle1 = new Platforms (this.color, 195, 380, 25, 25)
+let obstacle2 = new Platforms (this.color, 245, 355, 25, 25)
+let obstacle3 = new Platforms (this.color, 295, 320, 25, 25)
+let obstacle4 = new Platforms (this.color, 345, 290, 25, 25)
+// let obstacleVertical1 = new Platforms (this.color, 400, 270, 25, 180)
+// let obstacleVertical2 = new Platforms (this.color, 650, 230, 25, 175)
+let obstacleVertical3 = new Platforms (this.color, 890, 230, 25, 220)
+let obstacleHorizontal1 = new Platforms(this.color, 400, 270, 180, 25)
+// let obstacleHorizontal2 = new Platforms(this.color, 650, 230, 100, 25)
 
-const platformsArray = [tube1, piranha1, obstacle1, obstacle2, obstacle3, obstacle4, obstacleVertical1, obstacleVertical2, obstacleVertical3, obstacleHorizontal1, obstacleHorizontal2]
+const platformsArray = [obstacle1, obstacle2, obstacle3, obstacle4, obstacleVertical3, obstacleHorizontal1]
 
-setInterval (() => {
+// Attack Class
 
-},3000)
+class Attack {
+  constructor (img, x, y, direction) {
+    this.x = x,
+    this.y = y,
+    this.w = 50,
+    this.h = 50,
+    this.img = img,
+    this.direction = direction
+    this.speed = 5
+  }
 
+  drawAttack() {
+    if (this.direction === "right") {
+      this.x += this.speed
+      ctx.drawImage(fireball, this.x, this.y, this.w, this.h)
+    }
+    else if (this.direction === "left") {
+      this.x -= this.speed
+      ctx.drawImage(fireball2, this.x, this.y, this.w, this.h)
+    }
+  }
+  
+  contains(b){
+    return (this.x < b.x + b.w) &&
+      (this.x + this.w > b.x) &&
+      (this.y < b.y + b.h) &&
+      (this.y + this.h > b.y)
+  }
+
+}
+
+let attack1 = new Attack()
+
+// Champ Class
+
+class Champ {
+  constructor() {
+    this.x = 360,
+    this.y = 415,
+    this.w = 30,
+    this.h = 35,
+    this.direction = "right",
+    this.speed = 2
+  }
+    draw() {
+      ctx.drawImage(goombaImg, this.x, this.y, this.w, this.h);
+    }
+
+    goombaMove() {
+      if (this.direction === "right") {
+        this.x += this.speed
+      } else if (this.direction === "left") {
+        this.x -= this.speed
+      }
+
+      if (this.x <= 300) {
+       this.direction = "right"
+      } else if (this.x >= 600) {
+        this.direction = "left"
+      }
+    }
+
+    containsBottom(b){
+      return (this.y < b.y + b.h) &&
+      (this.y + this.h > b.y)
+    }
+}
+
+let goomba1 = new Champ()
+let goomba2 = new Champ()
 
 // Princess Class
 
 class Princess {
   constructor() {
-    this.x = 950,
+    this.x = 935,
     this.y = 410,
-    this.w = 20,
+    this.w = 50,
     this.h = 40
   }
   drawPrincess() {
@@ -257,12 +426,70 @@ class Rocket {
   }
 }
 
+
+// Flower Class
+
+class Flower {
+  constructor() {
+    this.x = 465,
+    this.y = 235,
+    this.w = 35,
+    this.h = 35
+  }
+    drawFlower () {
+      ctx.drawImage(flower, this.x, this.y, this.w, this.h)
+    }
+}
+
+let flower1 = new Flower()
+let flowerTouch = true
+let counterFlower = 0
+
+let goombaHealth = 1
+
+// Bowser Class
+
+class Bowser {
+  constructor () {
+    this.x = 780,
+    this.y = 0,
+    this.w = 120,
+    this.h = 120,
+    this.positionY = 320,
+    this.speed = 7,
+    this.direction = "left"
+  }
+  drawBowser () {
+    ctx.drawImage(bowser,this.x, this.y, this.w, this.h)
+    this.bowserDown()
+  }
+  
+  attackBowser() {
+    let attack2 = new Attack(fireballBowser, this.x, Math.floor(Math.random()* 200) +235, this.direction)
+    bowserAttack.push(attack2)
+  }
+
+  bowserDown () {
+    if (this.y > canvas.height - 160) {
+      return
+    }
+    this.y += this.speed
+  }
+}
+
+let bowser1 = new Bowser()
+
+// Every 3 seconds will create a rocket with Y random
 setInterval (() => {
   let rocket1 = new Rocket()
   rocketArray.push(rocket1)
+},4000)
 
-},3000)
 
+let bowserAttack = []
+setInterval(() => {
+  bowser1.attackBowser()
+},2000) 
 
 // Start the game (button)
 window.onload = () => {
@@ -281,15 +508,43 @@ document.addEventListener("keydown", (e) => {
       player1.moveUp()
     } else if (e.keyCode === 40) {
       player1.moveDown()
+    } else if (e.keyCode === 32) {
+      if (counterFlower >= 1) {
+      player1.attack()
     }
+  }
   })
 
+  
+let lastCol = 0
 const drawPlatforms = () => {
-  platformsArray.forEach ((el) => {
-    el.drawPlatform()  
-  }) 
+  if (!player1.contains(platformsArray[lastCol])){
+    player1.blockRight = false
+    player1.blockBot = false
+  }
+  platformsArray.forEach ((el, index) => {
+    el.drawPlatform()
+    if (player1.contains(el)){
+
+      if (player1.containsBottom(el)) {
+        player1.blockBot = true
+        lastCol = index
+      }
+    }
+  })
 }
 
+const displayGameOver = () => {
+  ctx.fillStyle = "red"
+  ctx.font = "20px Arial"
+  ctx.fillText("Game Over", canvas.width/2, 130)
+}
+
+let goombaPlay = true
+let bowserPlay = true
+let bowserHealth = 700
+let marioPlay = true
+let marioHealth = 200
 
 const update = () => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
@@ -300,13 +555,77 @@ const update = () => {
     player1.drawPlayer(imgCharacter)
     princess1.drawPrincess()
     drawPlatforms()
+    mario1.drawScore1()
+    if (flowerTouch) {
+      flower1.drawFlower()
+    }
+    if (player1.contains(flower1)) {
+      flowerTouch = false
+      counterFlower++
+    }
+    if (bowserPlay) {
+       if(player1.x >= 0) {
+      bowser1.drawBowser()
+      for (let i =0; i < bowserAttack.length; i++) {
+        bowserAttack[i].drawAttack()
+      }
+    } 
+    for(let i= 0; i < attackArray.length; i++) {
+      if (attackArray[i].contains(bowser1)) {
+        bowserHealth--
+        bowser1.h = 100,
+        bowser1.w = 100,
+        bowser1.y = 360
+        attackArray.splice(i ,1)
+    }
+      if (bowserHealth === 0) {
+        bowserPlay = false
+        obstacleVertical3.h = 160
+      }
+    }
+    for(let i= 0; i < bowserAttack.length; i++)
+    if (bowserAttack[i].contains(player1)) {
+      player1.x = 50,
+      player1.y = 400
+      lifes--
+      bowserAttack.splice(i ,1)
+    }
+    if (lifes === 0) {
+      displayGameOver( )
+    }
+    
+    }
+    for(let i = 0; i < attackArray.length; i++) {
+      attackArray[i].drawAttack()
+    }
+    if (goombaPlay) {
+      goomba1.draw()
+      goomba1.goombaMove()
+      if (player1.contains(goomba1)) {
+      player1.x = 50,
+      player1.y = 400
+      lifes--
+    } 
+
+    for (let i = 0; i < attackArray.length; i++) {
+      if (attackArray[i].contains(goomba1)) {
+        goombaPlay = false
+        attackArray.splice(i, 1)
+      }
+    }
+  }
     for (let i = 0; i < rocketArray.length; i++) {
       rocketArray[i].drawRocket()
       if (player1.contains(rocketArray[i])) {
         player1.x = 50
         player1.y = 400
+        lifes--
       }
     }}
+    if (lifes === 0) {
+      playing = false
+      displayGameOver()
+    }
     if (player1.contains(princess1)) {
       playing = false
       gif.classList.remove('hidden')
