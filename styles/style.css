@@ -34,11 +34,39 @@ body {
     border-color: white;
     box-shadow: 2rem;
     transition: 1s;
+    margin-bottom: 20px;
   }
-  
+ 
   #start-button:hover {
     transform: scale(1.5);
   }
+  
+  #rules-button {
+    background-color: white;
+    color: red;
+    padding: 15px 30px;
+    border-radius: 10px;
+    border-color: white;
+    box-shadow: 2rem;
+    transition: 1s;
+    width: 14vw;
+  }
+  
+  #rules-button:hover {
+    transform: scale(1.5);
+  }
+
+  .try-again {
+    background-color: white;
+    color: red;
+    padding: 15px 30px;
+    border-radius: 10px;
+    border-color: white;
+    box-shadow: 2rem;
+    transition: 1s;
+    width: 14vw;
+  }
+  
 
 .hidden {
   display: none !important;
@@ -55,7 +83,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: black;
+  background: black;
 }
 
 .gif h1 {

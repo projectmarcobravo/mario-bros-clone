@@ -4,6 +4,8 @@ const ctx = canvas.getContext('2d')
 const header = document.querySelector('.header')
 const gif = document.querySelector('.gif')
 const gameBoard = document.querySelector('.game-board')
+const tryAgain = document.querySelector('.try-again')
+const body = document.querySelector('body')
 
 // Images
 const floorImg = new Image()
@@ -535,9 +537,9 @@ const drawPlatforms = () => {
 }
 
 const displayGameOver = () => {
-  ctx.fillStyle = "red"
-  ctx.font = "20px Arial"
-  ctx.fillText("Game Over", canvas.width/2, 130)
+  ctx.fillStyle = "white"
+  ctx.font = "80px Arial"
+  ctx.fillText("GAME OVER", 270, 150, canvas.width/2)
 }
 
 let goombaPlay = true
@@ -576,7 +578,7 @@ const update = () => {
         bowser1.h = 100,
         bowser1.w = 100,
         bowser1.y = 360
-        attackArray.splice(i ,1)
+        attackArray.splice(i, 1)
     }
       if (bowserHealth === 0) {
         bowserPlay = false
@@ -629,6 +631,7 @@ const update = () => {
     if (player1.contains(princess1)) {
       playing = false
       gif.classList.remove('hidden')
+      gameBoard.classList.add('hidden')
     } 
     requestAnimationFrame(update)
 }
