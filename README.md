@@ -3,11 +3,11 @@
 The old Mario. The good one.
 
 ## **What is the game about?**
-Is a one level Mario Bros game.
-You have three enemies: goomba, bullet bill and the final BOSS: **Bowser**.
-To win, you have to defeat Bowser and be again with Peach.
-Goomba and Bowser are the only enemies you can defeat. The bullet bill is the unique unkillable.
-You have to take the flower to acquire superpower. You will can throw fireballs.
+Is a one level Mario Bros game. <br>
+You have three enemies: goomba, bullet bill and the final BOSS: **Bowser**. <br>
+To win, you have to defeat Bowser and be again with Peach. <br>
+Goomba and Bowser are the only enemies you can defeat. The bullet bill is the unique unkillable. <br>
+You have to take the flower to acquire superpower. You will can throw fireballs. <br>
 
 ## **How to Play**
 1. Start the game.
