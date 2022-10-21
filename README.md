@@ -1,5 +1,3 @@
-# mario-bros-clone
-
 # **Super Mario bros**
 
 The old Mario. The good one.
