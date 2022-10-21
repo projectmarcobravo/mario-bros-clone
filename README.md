@@ -4,7 +4,7 @@
 
 The old Mario. The good one.
 
-# H2 **What is the game about?**
+**What is the game about?**
 Is a one level Mario Bros game.
 You have three enemies: goomba, bullet bill and the final BOSS: **Bowser**.
 To win, you have to defeat Bowser and be again with Peach.
