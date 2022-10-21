@@ -253,7 +253,7 @@ class Player {
     if (this.y > canvas.height - 95) {
       return
     }
-    this.y += 5
+    this.y += 4
     if (this.y > canvas.height - 95) {
       imgCharacter = marioImg
     }
@@ -538,13 +538,14 @@ const drawPlatforms = () => {
 
 const displayGameOver = () => {
   ctx.fillStyle = "white"
-  ctx.font = "80px Arial"
-  ctx.fillText("GAME OVER", 270, 150, canvas.width/2)
+  ctx.font = "50px Arial"
+  ctx.fillText("GAME OVER", 340, 250, canvas.width/2)
+  background.update()
 }
 
 let goombaPlay = true
 let bowserPlay = true
-let bowserHealth = 700
+let bowserHealth = 30
 let marioPlay = true
 let marioHealth = 200
 
@@ -632,6 +633,7 @@ const update = () => {
       playing = false
       gif.classList.remove('hidden')
       gameBoard.classList.add('hidden')
+      body.classList.add('body-princess')
     } 
     requestAnimationFrame(update)
 }
