@@ -25,8 +25,8 @@ To run the game, you can clone the repository. Then open a browser window and wi
  -Canvas
 
  ### **Contact**
- Marco Bravo
- proyectomarcobravo@gmail.com
+ Marco Bravo<br>
+ proyectomarcobravo@gmail.com<br>
  https://www.linkedin.com/in/marcobravocosta/
  
 
